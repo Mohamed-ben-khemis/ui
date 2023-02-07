@@ -1,0 +1,68 @@
+# Default values for ui.
+env: prod
+appVersion: v0.1.0
+# nameOverride -- A name override for resources created by the chart.
+nameOverride: ""
+# fullnameOverride -- A full name override for resources created by the chart.
+fullnameOverride: ""
+
+ui:
+  # ui.spec.ui.image -- The image to use for ui pods.
+  # @default -- `ghcr.io/gomydesk/ui:${VERSION}`
+  image:
+    repository:
+      dev: 'nginx'
+      staging: 'nginx'
+      prod: 'nginx'
+  # ui.image.tag -- The tag for the ui image. Defaults to the chart version.
+    tag: 'latest'      
+  #pass the env variable to the container
+  apiUrl:
+    dev: https://desktop.gomydesk.com/api/
+    staging: https://desktop.gomydesk.com/api/
+    prod: https://desktop.gomydesk.com/api/
+  # ui.spec.ui.replicas -- The number of ui replicas to run.
+  replicas:
+    dev: 1
+    staging: 1
+    prod: 1
+  # ui.imagePullSecrets -- Image pull secrets for the ui pod.
+  imagePullSecrets: []
+  # ui.podSecurityContext -- The `PodSecurityContext` for the ui pod.
+  podSecurityContext: {}
+  # ui.securityContext -- The container security context for the ui pod.
+  securityContext: {}
+  # ui.resources -- Resource limits for the ui pod.
+  resources: {}
+  # ui.nodeSelector -- Node selectors for the ui pod.
+  nodeSelector: {}
+  # ui.tolerations -- Node tolerations for the ui pod.
+  tolerations: []
+  # ui.affinity -- Node affinity for the ui pod.
+  affinity: {}
+
+service:
+  type: ClusterIP
+  port: 3000
+  targetPort: 80
+
+ingress:
+  enabled:
+    dev: true
+    staging: true
+    prod: true
+  hostname:
+    dev: ""
+    staging: ""
+    prod: ""
+  path: /(.*)
+  pathType: Prefix
+  ingressClassName: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    cert-ui.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/proxy-body-size: 50m
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+  tls: true
+

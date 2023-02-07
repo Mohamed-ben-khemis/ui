@@ -1,0 +1,29 @@
+################################################################################
+#                                GoMyDesk-UI Application
+################################################################################
+
+This Helm chart deploys a UI application with React.
+
+## Introduction
+
+This chart deploys the UI application with React. The application can be accessed through a ClusterIP service or LoadBalancer service, depending on your configuration.
+
+## Prerequisites
+
+- A Kubernetes cluster
+- Helm installed in your cluster
+
+## Installing the Chart
+
+To install the chart with the release name `gomydesk-ui`, run the following command:
+helm install gomydesk-ui ui/ui
+
+## Uninstalling the Chart
+
+To uninstall the chart, run the following command:
+$ helm uninstall gomydesk-ui
+
+## Accessing the UI Application
+
+The UI application can be accessed through the service created by the chart. run the following command:
+kubectl port-forward svc/ui-service 8080:3000

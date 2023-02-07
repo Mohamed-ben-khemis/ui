@@ -1,0 +1,30 @@
+{{- $ui_repo := index $.Values.ui.image.repository $.Values.env }}
+{{- if not $ui_repo }}{{ fail (printf "ui_repo info required: %s" $.Values.env) }}{{ end -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    {{- include "ui.labels" . | nindent 4 }}
+  name: {{ include "ui.fullname" . }}
+spec:
+  replicas: {{ .Values.ui.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "ui.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "ui.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: {{ $ui_repo }}:{{ default .Chart.AppVersion .Values.ui.image.tag }}
+          ports:
+            - containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: {{ include "ui.fullname" . }}-config
+
+
+
+        
