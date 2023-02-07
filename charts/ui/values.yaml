@@ -59,6 +59,7 @@ ingress:
   pathType: Prefix
   ingressClassName: nginx
   annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
     cert-ui.io/cluster-issuer: letsencrypt-prod
     nginx.ingress.kubernetes.io/proxy-body-size: 50m
     nginx.ingress.kubernetes.io/use-regex: "true"
