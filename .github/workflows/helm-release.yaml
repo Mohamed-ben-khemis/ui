@@ -64,9 +64,9 @@ jobs:
     - name: Deploy to EKS Cluster(prod)
       #check if push is with tag
 
-      if: github.event_name == 'push' && ${{steps.check-if-push-is-with-tag.outputs  }}} == 'Push is with tag'
+      if: github.event_name == 'push' && github.ref == 'refs/tags/*' 
       run: |
-        echo 'prod' ${{steps.check-if-push-is-with-tag.outputs}}
+        echo 'prod'
 
 
 
