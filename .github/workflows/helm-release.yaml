@@ -62,7 +62,9 @@ jobs:
       run: |
         echo 'dev'
     - name: Deploy to EKS Cluster(prod)
-      if: github.event_name == 'push'
+    #check if push is with tag
+      
+      if:  github.event_name == 'push' && ${{github.ref}} =~ ^refs/tags/ 
       run: |
         echo 'prod'
       
@@ -70,4 +72,4 @@ jobs:
 
 
 
-      
+
