@@ -1,9 +1,18 @@
-name: HELM Release
+name: HELM Release , Deploy to Dev Namespace
 on:
+  pull_request:
+    branches:
+    - develop
+    types: [closed]
   push:
-    tags: 
-      - 'v*'
+    branches:
+    - gh-pages
+    tags:
+    - '*'
 
+env:
+  CLUSTER_NAME: gomydesk
+  AWS_REGION: eu-south-1
 jobs:
   release:
     # depending on default permission settings for your org (contents being read-only or read-write for workloads), you will have to add permissions
@@ -12,22 +21,39 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
 
-      - name: Configure Git
-        run: |
-          git config user.name "$GITHUB_ACTOR"
-          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+    - name: Configure Git
+      run: |
+        git config user.name "$GITHUB_ACTOR"
+        git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
-      - name: Install Helm
-        uses: azure/setup-helm@v3
-        with:
-          version: v3.10.0
+    - name: Install Helm
+      uses: azure/setup-helm@v3
+      with:
+        version: v3.10.0
 
-      - name: Run chart-releaser
-        uses: helm/chart-releaser-action@v1.5.0
-        env:
-          CR_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+    - name: Run chart-releaser
+      uses: helm/chart-releaser-action@v1.5.0
+      env:
+        CR_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+
+  deployment:
+    runs-on: 'ubuntu-latest'
+    needs: release
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+
+    - name: Deploy to EKS Cluster(Dev)
+      if: github.event.pull_request.base.ref == 'develop' && github.event.pull_request.merged == true
+      run: |
+        echo 'dev'
+    - name: Deploy to EKS Cluster(prod)
+      if: github.event_name == 'push'
+      run: |
+        echo 'prod'
