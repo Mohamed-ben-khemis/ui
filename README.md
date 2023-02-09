@@ -5,7 +5,7 @@ Helm Charts for gomydesk ui
 To add the repository:
 
 ```bash
-helm repo add ui https://gomydesk.github.io/helmUI/charts
+helm repo add ui https://mohamed-ben-khemis.github.io/ui
 ```
 
 To install the Helm chart:
