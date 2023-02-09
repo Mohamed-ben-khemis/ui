@@ -49,6 +49,14 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
+    - name: Check if push is with tag
+      run: |
+        echo "github.ref: ${{github.ref}}"
+        if [[ ${{github.ref}} =~ ^refs/tags/ ]]; then
+          echo "Push is with tag"
+        else
+          echo "Push is not with tag"
+        fi
     - name: Deploy to EKS Cluster(Dev)
       if: github.event.pull_request.base.ref == 'develop' && github.event.pull_request.merged == true
       run: |
