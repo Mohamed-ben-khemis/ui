@@ -44,6 +44,8 @@ jobs:
 
   deployment:
     runs-on: 'ubuntu-latest'
+    if: ${{ always() }}
+    needs: release
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
