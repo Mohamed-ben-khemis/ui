@@ -61,6 +61,11 @@ jobs:
       if: github.event.pull_request.base.ref == 'develop' && github.event.pull_request.merged == true
       run: |
         echo 'dev'
+    - name: Execute steps
+      if: github.ref == 'refs/tags/*'
+      run: |
+        echo "Push is with a tag. Executing steps..."
+        # Add your steps here
     - name: Deploy to EKS Cluster(prod)
       #check if push is with tag
 
