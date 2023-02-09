@@ -1,4 +1,4 @@
-name: HELM Release and Deploy to EKS 
+name: HELM Release and Deploy to EKS
 on:
   pull_request:
     branches:
@@ -62,12 +62,12 @@ jobs:
       run: |
         echo 'dev'
     - name: Deploy to EKS Cluster(prod)
-    #check if push is with tag
-      
-      if:  github.event_name == 'push' && ${{github.ref}} =~ ^refs/tags/ 
+      #check if push is with tag
+
+      if: github.event_name == 'push' && ${{steps.check-if-push-is-with-tag.outputs  }}} == 'Push is with tag'
       run: |
-        echo 'prod'
-      
+        echo 'prod' ${{steps.check-if-push-is-with-tag.outputs}}
+
 
 
 
