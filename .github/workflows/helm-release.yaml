@@ -44,12 +44,11 @@ jobs:
 
   deployment:
     runs-on: 'ubuntu-latest'
+    if: ${{ always() }}
     needs: release
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
-
-
     - name: Deploy to EKS Cluster(Dev)
       if: github.event.pull_request.base.ref == 'develop' && github.event.pull_request.merged == true
       run: |
