@@ -48,7 +48,7 @@ service:
 
 ingress:
   enabled:
-    dev: true
+    dev: false
     staging: true
     prod: true
   hostname:
